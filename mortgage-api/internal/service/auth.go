@@ -15,7 +15,7 @@ type AuthService struct {
 	repoUser    repository.Users
 	repoSession repository.Sessions
 	hasher      hash.PasswordHasher
-	AuthManager auth.AuthManager
+	authManager auth.AuthManager
 
 	accessTokenTTL  time.Duration
 	refreshTokenTTL time.Duration
@@ -28,7 +28,7 @@ func NewAuthsService(repoUser repository.Users, repoSession repository.Sessions,
 		repoUser:        repoUser,
 		repoSession:     repoSession,
 		hasher:          hasher,
-		AuthManager:     authManager,
+		authManager:     authManager,
 		accessTokenTTL:  accessTTL,
 		refreshTokenTTL: refreshTTL,
 	}
@@ -89,13 +89,13 @@ func (s *AuthService) createSession(userID types.BinaryUUID) (Tokens, error) {
 		err error
 	)
 
-	res.AccessToken.Value, err = s.AuthManager.NewJWT(userID.String(), s.accessTokenTTL)
+	res.AccessToken.Value, err = s.authManager.NewJWT(userID.String(), s.accessTokenTTL)
 	if err != nil {
 		return Tokens{}, err
 	}
 	res.AccessToken.ExpiresAt = time.Now().Add(s.accessTokenTTL)
 
-	res.RefreshToken.Value, err = s.AuthManager.NewRefreshToken()
+	res.RefreshToken.Value, err = s.authManager.NewRefreshToken()
 	if err != nil {
 		return Tokens{}, err
 	}

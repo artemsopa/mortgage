@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import "github.com/artomsopun/mortgage/mortgage-api/internal/app"
+
+const configsDir = "configs"
 
 func main() {
-	fmt.Println("Hello!")
+	app.Run(configsDir)
 }

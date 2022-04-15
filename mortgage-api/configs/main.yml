@@ -10,7 +10,7 @@ mysql:
   dbPassword: 1243
   dbHost: localhost
   dbPort: 3306
-  dbName: clendry_db
+  dbName: mortgage_db
 
 auth:
   accessTokenTTL: 2h

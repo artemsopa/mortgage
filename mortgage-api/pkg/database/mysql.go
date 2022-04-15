@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/artomsopun/mortgage/mortgage-api/internal/domain"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -21,11 +22,11 @@ func NewDB(user, password, host, port, name string) *gorm.DB {
 		log.Panicln(err)
 	}
 
-	/*if err := DB.AutoMigrate(
+	if err := DB.AutoMigrate(
 		&domain.User{}, &domain.Session{},
 	); err != nil {
 		log.Panicln(err)
-	}*/
+	}
 
 	return DB
 }

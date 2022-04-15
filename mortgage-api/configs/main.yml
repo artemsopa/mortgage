@@ -1,0 +1,24 @@
+http:
+  host: localhost
+  port: 8000
+  maxHeaderBytes: 1
+  readTimeout: 10s
+  writeTimeout: 10s
+
+mysql:
+  dbUser: root
+  dbPassword: 1243
+  dbHost: localhost
+  dbPort: 3306
+  dbName: clendry_db
+
+auth:
+  accessTokenTTL: 2h
+  refreshTokenTTL: 720h #30 days
+  signingKey: 1285328salt123
+  passwordSalt: 98765678key8721signing
+
+limiter:
+  rps: 10
+  burst: 20
+  ttl: 10m

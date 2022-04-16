@@ -1,11 +1,17 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import BlankLayout from './layouts/BlankLayout';
+import Layout from './layouts/Layout';
 
 const App: React.FC = () => {
   return (
-    <div>
-      <h1>Hello</h1>
-    </div>
+    <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Layout />} />
+          <Route path='/auth' element={<BlankLayout />} />
+        </Routes>
+      </BrowserRouter>
   );
 }
 

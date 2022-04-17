@@ -12,6 +12,9 @@ type User struct {
 	Nick     string `gorm:"column:nick"`
 	Email    string `gorm:"column:email"`
 	Password string `gorm:"column:password"`
+
+	Session Session `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE"`
+	Bank    Bank    `gorm:"foreignKey:UserID;constraint:OnDelete:CASCADE"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {

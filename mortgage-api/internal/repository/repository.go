@@ -19,14 +19,25 @@ type Sessions interface {
 	SetSession(session domain.Session) error
 }
 
+type Banks interface {
+	GetById(bankID types.BinaryUUID) (domain.Bank, error)
+	GetAllBanks() ([]domain.Bank, error)
+	GetBanksByUserID(userID types.BinaryUUID) ([]domain.Bank, error)
+	Create(bank domain.Bank) error
+	Update(bank domain.Bank) error
+	Delete(userID, bankID types.BinaryUUID) error
+}
+
 type Repositories struct {
 	Users    Users
 	Sessions Sessions
+	Banks    Banks
 }
 
 func NewRepositories(db *gorm.DB) *Repositories {
 	return &Repositories{
 		Users:    NewUsersRepo(db),
 		Sessions: NewSessionsRepo(db),
+		Banks:    NewBanksRepo(db),
 	}
 }

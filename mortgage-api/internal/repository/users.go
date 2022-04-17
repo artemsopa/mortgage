@@ -39,7 +39,7 @@ func (r *UsersRepo) Create(user domain.User) error {
 	if err == nil {
 		return errors.New("user already exists")
 	}
-	err = r.db.Where("nickname = ?", user.Nick).First(&domain.User{}).Error
+	err = r.db.Where("nick = ?", user.Nick).First(&domain.User{}).Error
 	if err == nil {
 		return errors.New("user already exists")
 	}

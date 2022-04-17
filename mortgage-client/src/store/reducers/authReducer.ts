@@ -1,14 +1,20 @@
-import { Action, AuthActionTypes, AuthState } from "../actions/authAction";
+import { LoginAction, LoginActionTypes } from "../actions/loginAction";
+
+export interface AuthState {
+    isAuthed: boolean;
+    payload?: string;
+}
 
 const initalState: AuthState = {
     isAuthed: false,
 }
 
-export const authReducer = (state = initalState, action: Action): AuthState => {
+export const loginReducer = (state = initalState, action: LoginAction): AuthState => {
     switch (action.type) {
-        case AuthActionTypes.LOGIN: return { isAuthed: true };
-        case AuthActionTypes.LOGIN_SUCCESS: return { isAuthed: true, payload: action.payload };
-        case AuthActionTypes.LOGIN_ERROR: return { isAuthed: false, payload: action.payload };
+        case LoginActionTypes.LOGIN: return { isAuthed: true };
+        case LoginActionTypes.LOGIN_SUCCESS: return { isAuthed: true, payload: action.payload };
+        case LoginActionTypes.LOGIN_ERROR: return { isAuthed: false, payload: action.payload };
+        case LoginActionTypes.LOGOUT: return { isAuthed: false };
         default: return state;
     }
 }

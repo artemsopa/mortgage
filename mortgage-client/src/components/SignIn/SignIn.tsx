@@ -1,48 +1,67 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from '../../hooks/typedSelectors';
-import './SignIn.css'
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useActions } from "../../hooks/useActions";
+import { useTypedSelector } from "../../hooks/useTypedSelectors";
+import { userInputSignIn } from "../../models/loginInput";
+import "./SignIn.css";
 
 const SignIn: React.FC = () => {
-    const [login, setLogin] = useState<string>('')
-    const [password, setPassword] = useState<string>('')
+  const [login, setLogin] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-    const { isAuthed, payload } = useTypedSelector(state => state.auth)
+  const navigate = useNavigate();
 
-    const dispatch = useDispatch();
+  const { isAuthed, payload } = useTypedSelector((state) => state.login);
+  const { signInCreator } = useActions();
 
-    return (
-        <div className="form-signin">
-            <form>
-                <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+  const handleClick = async (e: any) => {
+    e.preventDefault();
 
-                <div className="form-floating">
-                    <input
-                        value={login}
-                        onChange={e => setLogin(e.target.value)}
-                        type="email"
-                        className="form-control"
-                        id="floatingInput"
-                        placeholder="name@example.com"
-                    />
-                    <label htmlFor="floatingInput">Email address</label>
-                </div>
-                <div className="form-floating">
-                    <input
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        type="password"
-                        className="form-control"
-                        id="floatingPassword"
-                        placeholder="Password"
-                    />
-                    <label htmlFor="floatingPassword">Password</label>
-                </div>
+    signInCreator(new userInputSignIn(login, password));
+    
+    navigate("/")
+  };
 
-                <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-            </form>
-        </div>
-    )
-}
+  return (
+    <div className="main">
+      <div className="form-signin">
+        <form>
+          <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+
+          <div className="form-floating">
+            <input
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
+              type="email"
+              className="form-control"
+              id="floatingInput"
+              placeholder="name@example.com"
+            />
+            <label htmlFor="floatingInput">Email address</label>
+          </div>
+          <div className="form-floating">
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              className="form-control"
+              id="floatingPassword"
+              placeholder="Password"
+            />
+            <label htmlFor="floatingPassword">Password</label>
+          </div>
+
+          <button
+            onClick={handleClick}
+            className="w-100 btn btn-lg btn-primary"
+            type="submit"
+          >
+            Sign in
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default SignIn;

@@ -1,17 +1,28 @@
 import { Dispatch } from "redux"
-import { ILogin } from "../../models/loginInput"
-import { AuthActionTypes } from "../actions/authAction"
+import { userInputSignIn } from "../../models/loginInput"
+import { LoginActionTypes } from "../actions/loginAction"
 import AuthService from "../../services/authService"
-import { Response } from "../../models/response"
 
-export const Login = (loginInput: ILogin) => {
+export const signInCreator = (loginInput: userInputSignIn) => {
     return async (dispatch: Dispatch) => {
         try {
-            dispatch({type: AuthActionTypes.LOGIN})
-            const reponse = await AuthService.signIn(loginInput)
-            dispatch({type: AuthActionTypes.LOGIN_SUCCESS, payload: reponse.data.message})
+            //dispatch({type: LoginActionTypes.LOGIN})
+            console.log(loginInput)
+            const response = await AuthService.signIn(loginInput)
+            dispatch({type: LoginActionTypes.LOGIN_SUCCESS, payload: response.data.message})
         } catch(e) {
-            dispatch({type: AuthActionTypes.LOGIN_ERROR, payload: "something went wrong"})
+            dispatch({type: LoginActionTypes.LOGIN_ERROR, payload: "something went wrong"})
+        }
+    }
+}
+
+export const logoutCreator = () => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const response = await AuthService.logout()
+            dispatch({type: LoginActionTypes.LOGOUT})
+        } catch(e) {
+            console.log(e)
         }
     }
 }

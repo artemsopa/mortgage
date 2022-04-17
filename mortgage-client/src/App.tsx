@@ -1,17 +1,29 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import BlankLayout from './layouts/BlankLayout';
-import Layout from './layouts/Layout';
+import AllBanks from './components/AllBanks/AllBanks';
+import Nav from './components/Nav/Nav';
+import SignIn from './components/SignIn/SignIn';
+import SignUp from './components/SignUp/SignUp';
+import { useTypedSelector } from './hooks/useTypedSelectors';
 
 const App: React.FC = () => {
+  const { isAuthed, payload } = useTypedSelector(state => state.login)
+
   return (
-    <BrowserRouter>
+    <div className='main'>
+      <BrowserRouter>
+        <Nav />
         <Routes>
-          <Route path='/' element={<Layout />} />
-          <Route path='/auth' element={<BlankLayout />} />
+          {isAuthed && <Route path='/' element={<AllBanks />} /> }
+          {!isAuthed && <Route>
+            <Route path='/sign-in' element={<SignIn />} />
+            <Route path='/sign-up' element={<SignUp />} />
+          </Route> }
+          <Route path="*" element={<h2>Not found</h2>} />
         </Routes>
       </BrowserRouter>
+    </div>
   );
 }
 

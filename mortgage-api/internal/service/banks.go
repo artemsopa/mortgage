@@ -124,6 +124,6 @@ func (s *BanksService) CalculateMortgage(input CalculateInput) string {
 		Rate:   bankRepo.Rate,
 		Months: int(bankRepo.LoanTerm),
 	}
-	result := (c.Loan*(c.Rate/12)*(math.Pow((1+(c.Rate/12)), 5)))/math.Pow((1+(c.Rate/12)), 5) - 1
+	result := ((c.Loan-c.Down)*(c.Rate/12)*(math.Pow((1+(c.Rate/12)), float64(c.Months))))/math.Pow((1+(c.Rate/12)), float64(c.Months)) - 1
 	return strconv.Itoa(int(result))
 }

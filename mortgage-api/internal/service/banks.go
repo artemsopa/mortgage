@@ -2,6 +2,8 @@ package service
 
 import (
 	"errors"
+	"math"
+	"strconv"
 
 	"github.com/artomsopun/mortgage/mortgage-api/internal/domain"
 	"github.com/artomsopun/mortgage/mortgage-api/internal/repository"
@@ -91,8 +93,37 @@ func (s *BanksService) UpdateBank(bank Bank) error {
 }
 
 func (s *BanksService) DeleteBank(userID, bankID types.BinaryUUID) error {
-	err := s.repoBanks.Delete(userID, bankID)
+	bankRepo, err := s.repoBanks.GetById(bankID)
+	if err != nil {
+		return err
+	}
+	if userID != bankRepo.UserID {
+		return errors.New("you can delete your banks only")
+	}
+	err = s.repoBanks.Delete(userID, bankID)
 	return err
 }
 
-//func (s *BanksService) CalculateMortgage(input CalculateInput) (string, error) {}
+func (s *BanksService) CalculateMortgage(input CalculateInput) string {
+	bankRepo, err := s.repoBanks.GetById(input.BankID)
+	if err != nil {
+		return "Bank not found"
+	}
+	if input.Loan > bankRepo.MaxLoan && input.Payment < bankRepo.MinPayment {
+		return "False initial loan & down payment"
+	}
+	if input.Loan > bankRepo.MaxLoan {
+		return "Initial loan higher then max"
+	}
+	if input.Payment < bankRepo.MinPayment {
+		return "Down payment lower then min"
+	}
+	c := Calculator{
+		Loan:   float64(input.Loan),
+		Down:   float64(input.Payment),
+		Rate:   bankRepo.Rate,
+		Months: int(bankRepo.LoanTerm),
+	}
+	result := (c.Loan*(c.Rate/12)*(math.Pow((1+(c.Rate/12)), 5)))/math.Pow((1+(c.Rate/12)), 5) - 1
+	return strconv.Itoa(int(result))
+}

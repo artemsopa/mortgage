@@ -12,11 +12,11 @@ func (h *Handler) initBanksRoutes(api *echo.Group) {
 	banks := api.Group("/banks")
 	{
 		banks.GET("", h.getAllBanks)
+		banks.POST("/mortgage", h.getMortgage)
 		profile := banks.Group("/profile", h.checkAuth)
 		{
 			profile.GET("", h.getBanksByUserID)
-			profile.POST("/create", h.createBank)
-			//profile.POST("/mortgage", h.getMortgage)
+			profile.POST("", h.createBank)
 			profile.PUT("", h.updateBank)
 			profile.DELETE("/:id", h.deleteBank)
 		}
@@ -26,7 +26,7 @@ func (h *Handler) initBanksRoutes(api *echo.Group) {
 type bankInfo struct {
 	ID         types.BinaryUUID `json:"id"`
 	Title      string           `json:"title"`
-	Rate       float32          `json:"rate"`
+	Rate       float64          `json:"rate"`
 	MaxLoan    uint             `json:"maxLoan"`
 	MinPayment uint             `json:"minPayment"`
 	LoanTerm   uint             `json:"loanTerm"`
@@ -77,9 +77,9 @@ func (h *Handler) getBanksByUserID(c echo.Context) error {
 	return c.JSON(http.StatusOK, banks)
 }
 
-type bankInputCreate struct {
+type bankInput struct {
 	Title      string  `json:"title"`
-	Rate       float32 `json:"rate"`
+	Rate       float64 `json:"rate"`
 	MaxLoan    uint    `json:"maxLoan"`
 	MinPayment uint    `json:"minPayment"`
 	LoanTerm   uint    `json:"loanTerm"`
@@ -90,7 +90,7 @@ func (h *Handler) createBank(c echo.Context) error {
 	if err != nil {
 		return newResponse(c, http.StatusInternalServerError, err.Error())
 	}
-	var input bankInputCreate
+	var input bankInput
 	if err := c.Bind(&input); err != nil {
 		return newResponse(c, http.StatusBadRequest, err.Error())
 	}
@@ -111,7 +111,7 @@ func (h *Handler) createBank(c echo.Context) error {
 type bankInputUpdate struct {
 	ID         types.BinaryUUID `json:"id"`
 	Title      string           `json:"title"`
-	Rate       float32          `json:"rate"`
+	Rate       float64          `json:"rate"`
 	MaxLoan    uint             `json:"maxLoan"`
 	MinPayment uint             `json:"minPayment"`
 	LoanTerm   uint             `json:"loanTerm"`
@@ -139,7 +139,7 @@ func (h *Handler) updateBank(c echo.Context) error {
 	}); err != nil {
 		return newResponse(c, http.StatusInternalServerError, err.Error())
 	}
-	return newResponse(c, http.StatusCreated, "bank updated")
+	return newResponse(c, http.StatusOK, "bank updated")
 }
 
 func (h *Handler) deleteBank(c echo.Context) error {
@@ -154,12 +154,25 @@ func (h *Handler) deleteBank(c echo.Context) error {
 	if err != nil {
 		return newResponse(c, http.StatusInternalServerError, err.Error())
 	}
-
-	return c.JSON(http.StatusOK, "bank deleted")
+	return newResponse(c, http.StatusOK, "bank deleted")
 }
 
 type calculateInput struct {
 	Loan    uint             `json:"loan"`
 	Payment uint             `json:"payment"`
 	BankID  types.BinaryUUID `json:"bankId"`
+}
+
+func (h *Handler) getMortgage(c echo.Context) error {
+	var input calculateInput
+	if err := c.Bind(&input); err != nil {
+		return newResponse(c, http.StatusBadRequest, err.Error())
+	}
+
+	result := h.services.Banks.CalculateMortgage(service.CalculateInput{
+		Loan:    input.Loan,
+		Payment: input.Payment,
+		BankID:  input.BankID,
+	})
+	return newResponse(c, http.StatusOK, result)
 }

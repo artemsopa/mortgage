@@ -10,7 +10,7 @@ type Bank struct {
 	ID types.BinaryUUID `gorm:"primary_key;default:(UUID_TO_BIN(UUID()))"`
 
 	Title      string  `gorm:"column:title"`
-	Rate       float32 `gorm:"column:rate"`
+	Rate       float64 `gorm:"column:rate"`
 	MaxLoan    uint    `gorm:"column:max_loan"`
 	MinPayment uint    `gorm:"column:min_payment"`
 	LoanTerm   uint    `gorm:"column:loan_term"`

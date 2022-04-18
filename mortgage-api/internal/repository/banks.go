@@ -20,7 +20,7 @@ func NewBanksRepo(db *gorm.DB) *BanksRepo {
 
 func (r *BanksRepo) GetById(bankID types.BinaryUUID) (domain.Bank, error) {
 	bank := domain.Bank{}
-	if err := r.db.First(&bank, bankID).Error; err != nil {
+	if err := r.db.Where("id = ?", bankID).First(&bank).Error; err != nil {
 		return domain.Bank{}, errors.New("bank not found")
 	}
 	return bank, nil
@@ -36,7 +36,7 @@ func (r *BanksRepo) GetAllBanks() ([]domain.Bank, error) {
 
 func (r *BanksRepo) GetBanksByUserID(userID types.BinaryUUID) ([]domain.Bank, error) {
 	var banks []domain.Bank
-	if err := r.db.Where("user_id != ?", userID).Find(&banks).Error; err != nil {
+	if err := r.db.Where("user_id = ?", userID).Find(&banks).Error; err != nil {
 		return []domain.Bank{}, err
 	}
 	return banks, nil
@@ -56,7 +56,7 @@ func (r *BanksRepo) Update(bank domain.Bank) error {
 	if err == nil {
 		return errors.New("bank title already exist")
 	}
-	err = r.db.Model(domain.Bank{}).Updates(&bank).Error
+	err = r.db.Save(&bank).Error
 	return err
 }
 

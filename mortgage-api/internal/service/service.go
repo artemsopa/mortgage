@@ -51,7 +51,7 @@ type Bank struct {
 	ID types.BinaryUUID
 
 	Title      string
-	Rate       float32
+	Rate       float64
 	MaxLoan    uint
 	MinPayment uint
 	LoanTerm   uint
@@ -63,6 +63,13 @@ type CalculateInput struct {
 	Loan    uint
 	Payment uint
 	BankID  types.BinaryUUID
+}
+
+type Calculator struct {
+	Loan   float64
+	Down   float64
+	Rate   float64
+	Months int
 }
 
 type Auths interface {
@@ -83,7 +90,7 @@ type Banks interface {
 	CreateBank(bank Bank) error
 	UpdateBank(bank Bank) error
 	DeleteBank(userID, bankID types.BinaryUUID) error
-	//CalculateMortgage(input CalculateInput) (string, error)
+	CalculateMortgage(input CalculateInput) string
 }
 
 type Services struct {

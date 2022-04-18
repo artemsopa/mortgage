@@ -24,7 +24,8 @@ const SignIn: React.FC = () => {
 
   return (
     <div className="main">
-      <div className="form-signin">
+    {isAuthed && <h1>You are already logged in. Logout</h1>}
+    {!isAuthed && <div className="form-signin">
         <form>
           <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -53,13 +54,13 @@ const SignIn: React.FC = () => {
 
           <button
             onClick={handleClick}
-            className="w-100 btn btn-lg btn-primary"
+            className="b-w-p w-100 btn btn-lg btn-primary"
             type="submit"
           >
             Sign in
           </button>
         </form>
-      </div>
+      </div>}
     </div>
   );
 };

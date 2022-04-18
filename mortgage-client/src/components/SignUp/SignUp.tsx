@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTypedSelector } from '../../hooks/useTypedSelectors';
 import { userInputSignUp } from '../../models/registerInput';
 import AuthService from '../../services/authService';
 import './SignUp.css'
@@ -9,6 +10,8 @@ const SignUp: React.FC = () => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [confirm, setConfirm] = useState<string>('')
+
+    const { isAuthed, payload } = useTypedSelector((state) => state.login);
 
     const navigate = useNavigate();
 
@@ -26,7 +29,8 @@ const SignUp: React.FC = () => {
 
     return (
         <div className='main'>
-            <div className="form-signin">
+            {isAuthed && <h1>You are already logged in. Logout</h1>}
+            {!isAuthed && <div className="form-signin">
                 <form>
                     <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
@@ -77,7 +81,7 @@ const SignUp: React.FC = () => {
 
                     <button onClick={ handleClick } className="w-100 btn btn-lg btn-primary" type="submit">Sign Up</button>
                 </form>
-            </div>
+            </div>}
         </div>
     )
 }

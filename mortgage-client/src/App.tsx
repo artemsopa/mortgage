@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import AllBanks from './components/AllBanks/AllBanks';
+import MyBanks from './components/MyBanks/MyBanks';
 import Nav from './components/Nav/Nav';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
@@ -15,11 +16,12 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Nav />
         <Routes>
-          {isAuthed && <Route path='/' element={<AllBanks />} /> }
-          {!isAuthed && <Route>
+          <Route path='/' element={<AllBanks />} />
+          <Route path='/my-banks' element={<MyBanks />} />
+          <Route>
             <Route path='/sign-in' element={<SignIn />} />
             <Route path='/sign-up' element={<SignUp />} />
-          </Route> }
+          </Route>
           <Route path="*" element={<h2>Not found</h2>} />
         </Routes>
       </BrowserRouter>

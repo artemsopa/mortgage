@@ -22,14 +22,14 @@ const Nav: React.FC = () => {
         <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
             <div className="container-fluid">
                 <div className="collapse navbar-collapse" id="navbarCollapse">
-                    {isAuthed && <ul className="navbar-nav me-auto mb-2 mb-md-0">
+                    <ul className="navbar-nav me-auto mb-2 mb-md-0">
                         <li className="nav-item">
                             <Link to="/" className="nav-link">All Banks</Link>
                         </li>
-                        <li className="nav-item">
-                            <Link to="/sign-in" className="nav-link">My Banks</Link>
-                        </li>
-                    </ul> }
+                        {isAuthed && <li className="nav-item">
+                            <Link to="/my-banks" className="nav-link">My Banks</Link>
+                        </li>}
+                    </ul>
                 </div>
                 <div>
                     { !isAuthed &&

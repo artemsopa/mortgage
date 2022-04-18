@@ -7,7 +7,6 @@ export const signInCreator = (loginInput: userInputSignIn) => {
     return async (dispatch: Dispatch) => {
         try {
             //dispatch({type: LoginActionTypes.LOGIN})
-            console.log(loginInput)
             const response = await AuthService.signIn(loginInput)
             dispatch({type: LoginActionTypes.LOGIN_SUCCESS, payload: response.data.message})
         } catch(e) {
@@ -21,6 +20,17 @@ export const logoutCreator = () => {
         try {
             const response = await AuthService.logout()
             dispatch({type: LoginActionTypes.LOGOUT})
+        } catch(e) {
+            console.log(e)
+        }
+    }
+}
+
+export const refreshCreator = () => {
+    return async (dispatch: Dispatch) => {
+        try {
+            const response = await AuthService.refreshSession()
+            dispatch({type: LoginActionTypes.LOGIN})
         } catch(e) {
             console.log(e)
         }

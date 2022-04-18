@@ -7,7 +7,7 @@ import "./Modal.css";
 type ModalProps = {
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
-  getAllBanksInfo: () => Promise<void>
+  getAllBanksInfo: () => Promise<void>;
   bank: bankInfo;
 };
 
@@ -26,15 +26,15 @@ const EditModal: React.FC<ModalProps> = (props) => {
     e.preventDefault();
 
     let bank = new bankInfo(
-        props.bank.id,
-        title,
-        getFixed(rate),
-        maxLoan,
-        minPayment,
-        term,
-        props.bank.userId
-      )
-    await BankService.updateBank(bank)
+      props.bank.id,
+      title,
+      getFixed(rate),
+      maxLoan,
+      minPayment,
+      term,
+      props.bank.userId
+    );
+    await BankService.updateBank(bank);
     await props.getAllBanksInfo();
     props.setActive(false);
   };

@@ -6,7 +6,7 @@ import "./Modal.css";
 type ModalProps = {
   active: boolean;
   setActive: Dispatch<SetStateAction<boolean>>;
-  getAllBanksInfo: () => Promise<void>
+  getAllBanksInfo: () => Promise<void>;
   bank: bankInput;
 };
 
@@ -24,14 +24,8 @@ const AddModal: React.FC<ModalProps> = (props) => {
   const submit = async (e: any) => {
     e.preventDefault();
 
-    let bank = new bankInput(
-        title,
-        getFixed(rate),
-        maxLoan,
-        minPayment,
-        term,
-      )
-    await BankService.createBank(bank)
+    let bank = new bankInput(title, getFixed(rate), maxLoan, minPayment, term);
+    await BankService.createBank(bank);
     await props.getAllBanksInfo();
     props.setActive(false);
   };

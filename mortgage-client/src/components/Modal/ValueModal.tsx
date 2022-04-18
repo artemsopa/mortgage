@@ -19,21 +19,17 @@ const ValueModal: React.FC<ModalProps> = (props) => {
   const close = (e: any) => {
     e.preventDefault();
     setLoan(props.bank.minPayment + 5000);
-    setPayment(props.bank.minPayment)
+    setPayment(props.bank.minPayment);
     setMessage("");
     props.setActive(false);
-  }
+  };
 
   const submit = async (e: any) => {
     e.preventDefault();
 
-    let calc = new calculateInput(
-        loan,
-        payment,
-        props.bank.id,
-      )
+    let calc = new calculateInput(loan, payment, props.bank.id);
     const response = await BankService.getMortgage(calc);
-    setMessage(response.data.message)
+    setMessage(response.data.message);
   };
 
   return (
@@ -98,7 +94,7 @@ const ValueModal: React.FC<ModalProps> = (props) => {
                 </div>
 
                 <button
-                onClick={(e) => submit(e)}
+                  onClick={(e) => submit(e)}
                   className="w-100 mb-2 btn btn-lg rounded-4 btn-outline-primary"
                   type="submit"
                 >

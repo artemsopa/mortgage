@@ -66,10 +66,9 @@ type CalculateInput struct {
 }
 
 type Calculator struct {
-	Loan   float64
-	Down   float64
-	Rate   float64
-	Months int
+	Principal float64
+	Rate      float64
+	Months    int
 }
 
 type Auths interface {

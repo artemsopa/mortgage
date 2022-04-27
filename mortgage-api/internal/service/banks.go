@@ -119,11 +119,10 @@ func (s *BanksService) CalculateMortgage(input CalculateInput) string {
 		return "Down payment lower then min"
 	}
 	c := Calculator{
-		Loan:   float64(input.Loan),
-		Down:   float64(input.Payment),
-		Rate:   bankRepo.Rate,
-		Months: int(bankRepo.LoanTerm),
+		Principal: float64(input.Loan - input.Payment),
+		Rate:      bankRepo.Rate,
+		Months:    int(bankRepo.LoanTerm),
 	}
-	result := ((c.Loan-c.Down)*(c.Rate/12)*(math.Pow((1+(c.Rate/12)), float64(c.Months))))/math.Pow((1+(c.Rate/12)), float64(c.Months)) - 1
+	result := (c.Principal*(c.Rate/12)*(math.Pow(1+c.Rate/12, float64(c.Months))))/math.Pow(1+c.Rate/12, float64(c.Months)) - 1
 	return strconv.Itoa(int(result))
 }
